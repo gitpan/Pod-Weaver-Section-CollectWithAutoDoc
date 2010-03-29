@@ -9,7 +9,7 @@
       "version" : 1.4,
       "url" : "http://module-build.sourceforge.net/META-spec-v1.4.html"
    },
-   "version" : "1.100880",
+   "version" : "1.100881",
    "name" : "Pod-Weaver-Section-CollectWithAutoDoc",
    "author" : [
       "Marcel Gruenauer <marcel@cpan.org>"
@@ -18,7 +18,7 @@
    "build_requires" : {},
    "provides" : {
       "Pod::Weaver::Section::CollectWithAutoDoc" : {
-         "version" : "1.100880",
+         "version" : "1.100881",
          "file" : "lib/Pod/Weaver/Section/CollectWithAutoDoc.pm"
       }
    },

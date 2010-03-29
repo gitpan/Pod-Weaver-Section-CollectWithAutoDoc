@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Pod::Weaver::Section::CollectWithAutoDoc;
-our $VERSION = '1.100880';
+our $VERSION = '1.100881';
 
 # ABSTRACT: Section to gather specific commands and add auto-generated documentation
 use Moose;
@@ -21,11 +21,15 @@ sub prepare_input {
     # Load the module file so it can auto-generated documentation
     my $file = $input->{filename};
     return unless defined $file;
-    return if $file eq 'lib/Pod/Weaver/Section/CollectWithAutoDoc.pm';
+    (my $inc_key = $file) =~ s!^lib/!!;
+    if ($INC{$inc_key}) {
+        $self->log("$file appears to have been already loaded, skipping");
+        return;
+    }
     unless (my $return = do $file) {
-        warn "couldn't parse $file: $@" if $@;
-        warn "couldn't do $file: $!" unless defined $return;
-        warn "couldn't run $file" unless $return;
+        $self->log("couldn't parse $file: $@") if $@;
+        $self->log("couldn't do $file: $!") unless defined $return;
+        $self->log("couldn't run $file") unless $return;
     }
 }
 
@@ -120,7 +124,7 @@ override weave_section => sub {
                     for my $helper_purpose (@helper_purposes) {
                         for my $name (@{ $helper_purpose->{name} }) {
                             $_->children->push(
-                                $self->pod_command(item => $name));
+                                $self->pod_command(item => "C<$name>"));
                         }
                         $_->children->push(
                             $self->pod_ordinary(
@@ -154,7 +158,7 @@ Pod::Weaver::Section::CollectWithAutoDoc - Section to gather specific commands a
 
 =head1 VERSION
 
-version 1.100880
+version 1.100881
 
 =head1 SYNOPSIS
 
