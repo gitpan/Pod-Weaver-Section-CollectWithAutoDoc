@@ -3,7 +3,9 @@ use strict;
 use warnings;
 
 package Pod::Weaver::Section::CollectWithAutoDoc;
-our $VERSION = '1.100881';
+BEGIN {
+  $Pod::Weaver::Section::CollectWithAutoDoc::VERSION = '1.100980';
+}
 
 # ABSTRACT: Section to gather specific commands and add auto-generated documentation
 use Moose;
@@ -31,6 +33,10 @@ sub prepare_input {
         $self->log("couldn't do $file: $!") unless defined $return;
         $self->log("couldn't run $file") unless $return;
     }
+
+    # Some modules define a UNIVERSAL::AUTOLOAD, this can be unwelcome for our
+    # circumstances, so we shoot it. :)
+    undef *UNIVERSAL::AUTOLOAD;
 }
 
 sub get_package_name {
@@ -158,7 +164,7 @@ Pod::Weaver::Section::CollectWithAutoDoc - Section to gather specific commands a
 
 =head1 VERSION
 
-version 1.100881
+version 1.100980
 
 =head1 SYNOPSIS
 
@@ -240,11 +246,6 @@ The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit L<http://www.perl.com/CPAN/> to find a CPAN
 site near you, or see
 L<http://search.cpan.org/dist/Pod-Weaver-Section-CollectWithAutoDoc/>.
-
-The development version lives at
-L<http://github.com/hanekomu/Pod-Weaver-Section-CollectWithAutoDoc/>.
-Instead of sending patches, please fork this project using the standard git
-and github infrastructure.
 
 =head1 AUTHOR
 
